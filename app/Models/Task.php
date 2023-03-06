@@ -1,17 +1,13 @@
 <?php
 
 namespace App\Models;
-
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
-class Task extends Authenticatable
+class Task extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
+    use HasFactory;
+    public $incrementing = false;
     /**
      * The attributes that are mass assignable.
      *
@@ -19,7 +15,7 @@ class Task extends Authenticatable
      */
     protected $fillable = [
         'id',
-        'title ',
+        'title',
         'description',
         'status',
         'project_id',
@@ -41,5 +37,6 @@ class Task extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
+        'id' => 'string'
     ];
 }

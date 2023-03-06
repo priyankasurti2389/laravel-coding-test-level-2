@@ -4,7 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Project extends Model
+class ProjectUser extends Model
 {
     
     use HasFactory;
@@ -16,7 +16,8 @@ class Project extends Model
      */
     protected $fillable = [
         'id',
-        'name',
+        'project_id',
+        'user_id',
     ];
 
     /**
@@ -35,8 +36,4 @@ class Project extends Model
     protected $casts = [
         'id' => 'string'
     ];
-
-    public function user(){
-        return $this->belongsToMany(User::class,'project_users');
-    }
 }
