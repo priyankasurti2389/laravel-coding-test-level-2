@@ -1,18 +1,14 @@
 <?php
 
 namespace App\Models;
-
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Project extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    
+    use HasFactory;
     public $incrementing = false;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -20,9 +16,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'id',
-        'username',
-        // 'email',
-        'password',
+        'name',
     ];
 
     /**
@@ -31,8 +25,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
     ];
 
     /**
@@ -41,11 +33,10 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'id' => 'string'
     ];
 
-    public function project(){
-        return $this->belongsToMany(Project::class,'project_users');
+    public function user(){
+        return $this->belongsToMany(User::class,'project_users');
     }
 }
