@@ -45,7 +45,6 @@ class TaskController extends BaseController
         $validator = Validator::make($input, [
             'title' => 'required',
             'description' => 'required',
-            'status' => 'required',
             'project_id' => 'required',
         ]);
 
@@ -53,8 +52,10 @@ class TaskController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors(),200);
         }
 
+        $input['status']="not_started";
         $input['id'] = Str::uuid();
-        // print_r($input);exit;
+        $input['user_id'] = $request->user()->id;
+
         $task = Task::create($input);
 
         return $this->sendResponse($task, 'Task created successfully.');
@@ -116,6 +117,7 @@ class TaskController extends BaseController
         $task->description = $input['description'];
         $task->status = $input['status'];
         $task->project_id = $input['project_id'];
+        $task->user_id =$request->user()->id;
         $task->update();
 
         return $this->sendResponse($task, 'Task updated successfully.');

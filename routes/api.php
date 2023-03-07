@@ -21,12 +21,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('projects', ProjectController::class);
-Route::post('projects/assign', [ProjectController::class, 'assignProjectToUser']);
+Route::post('user/login', [UserController::class, 'login']);
 
-Route::apiResource('tasks', TaskController::class);
-Route::post('tasks/status/update', [TaskController::class, 'updateTaskStatus']);
+Route::group(['middleware' => ['auth:api', 'checkHeader']], function () {
+    Route::apiResource('projects', ProjectController::class);
+    Route::post('projects/assign', [ProjectController::class, 'assignProjectToUser']);
 
-Route::apiResource('users', UserController::class);
+    Route::apiResource('tasks', TaskController::class);
+    Route::post('tasks/status/update', [TaskController::class, 'updateTaskStatus']);
+
+    Route::apiResource('users', UserController::class);
+
+});
 
 
