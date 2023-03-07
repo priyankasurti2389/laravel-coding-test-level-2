@@ -13,6 +13,13 @@ class RoleTableSeeder extends Seeder
     public function run()
     {
         \DB::table('roles')->truncate();
+        DB::table('roles')->insert([
+            'id'=>Str::uuid(),
+            'role_name' => "SUPERADMIN",
+            'access_list' => '[{"path": "*","methods": ["*"]}]',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
         \DB::table('roles')->insert([
             'id'=>Str::uuid(),
             'role_name' => "ADMIN",
