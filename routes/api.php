@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('users', [UserController::class, 'store']);
 Route::post('user/login', [UserController::class, 'login']);
+Route::get('v1/projects', [ProjectController::class, 'index']);
 
 Route::group(['middleware' => ['auth:api', 'checkHeader']], function () {
     Route::apiResource('projects', ProjectController::class);
