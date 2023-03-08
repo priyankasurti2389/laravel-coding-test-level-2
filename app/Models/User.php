@@ -6,7 +6,10 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Laravel\Passport\HasApiTokens;
+
+use App\Models\Project;
+use App\Models\Role;
 
 class User extends Authenticatable
 {
@@ -23,6 +26,7 @@ class User extends Authenticatable
         'username',
         // 'email',
         'password',
+        'role_id',
     ];
 
     /**
@@ -47,5 +51,10 @@ class User extends Authenticatable
 
     public function project(){
         return $this->belongsToMany(Project::class,'project_users');
+    }
+
+    public function accessRole()
+    {
+        return $this->hasOne(Role::class,'id','role_id');
     }
 }

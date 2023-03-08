@@ -21,12 +21,22 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('projects', ProjectController::class);
-Route::post('projects/assign', [ProjectController::class, 'assignProjectToUser']);
+Route::post('users', [UserController::class, 'store']);
+Route::post('user/login', [UserController::class, 'login']);
+Route::get('v1/projects', [ProjectController::class, 'index']);
 
-Route::apiResource('tasks', TaskController::class);
-Route::post('tasks/status/update', [TaskController::class, 'updateTaskStatus']);
+Route::group(['middleware' => ['auth:api', 'checkHeader']], function () {
+    Route::apiResource('projects', ProjectController::class);
+    Route::post('projects/assign', [ProjectController::class, 'assignProjectToUser']);
 
-Route::apiResource('users', UserController::class);
+    Route::apiResource('tasks', TaskController::class);
+    Route::post('tasks/status/update', [TaskController::class, 'updateTaskStatus']);
+
+    // Route::apiResource('users', UserController::class);
+    Route::put('users/{:id}', [UserController::class, 'update']);
+    Route::get('users/{:id}', [UserController::class, 'show']);
+    Route::delete('users/{:id}', [UserController::class, 'destroy']);
+    Route::get('users', [UserController::class, 'index']);
+});
 
 

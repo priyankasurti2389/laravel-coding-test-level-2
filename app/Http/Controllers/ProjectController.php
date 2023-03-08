@@ -16,10 +16,29 @@ class ProjectController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $query = Project::query();
-        $projects=$query->orderBy('id', 'DESC')->get();
+        if(!empty($request->q)){
+            $query->where('name','like','%'.$request->q.'%');
+        }
+
+        $page_index=0;
+        if(!empty($request->pageIndex)){
+            $request->page=$request->pageIndex+1;
+        }
+
+        $page_size=3;
+        if(!empty($request->pageSize)){
+            $page_size=$request->pageSize;
+        }
+
+        $sort_field=!empty($request->sortByField)?$request->sortByField:'name';
+        $sort_direction = !empty($request->sortDirection)?$request->sortDirection:'ASC' ;
+        
+        $query->orderBy($sort_field,$sort_direction);
+            
+        $projects=$query->paginate($page_size);
         return $this->sendResponse($projects, 'Projects retrieved successfully.');
     }
 

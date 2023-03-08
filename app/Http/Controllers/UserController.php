@@ -44,7 +44,8 @@ class UserController extends BaseController
 
         $validator = Validator::make($input, [
             'username' => 'required|unique:users,username',
-            'password' => 'required'
+            'password' => 'required',
+            'role_id'  => 'required',
         ]);
 
         if($validator->fails()){
@@ -55,7 +56,9 @@ class UserController extends BaseController
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
 
-        return $this->sendResponse($user, 'User created successfully.');
+        $success['name']  = $user->username;
+        $success['token'] = $user->createToken('accessToken')->accessToken;
+        return $this->sendResponse($success, 'User created successfully.');
     }
 
     /**
@@ -125,4 +128,24 @@ class UserController extends BaseController
         $project->delete();
         return $this->sendResponse([], 'Project deleted successfully.');
     }
+
+    public function login(Request $request)
+    {
+        if(\Auth::attempt(['username' => $request->username, 'password' => $request->password])){ 
+            $user = \Auth::user(); 
+            
+            $success['name'] =  $user->username;
+            $success['role'] =  $user->role_id;
+            $success['id'] =  $user->id;
+            $success['token'] =  $user->createToken('MyApp')->accessToken; 
+            
+            return $this->sendResponse($success, 'User login successfully.');
+        
+        }else{ 
+            return $this->sendError('Invalid Username or Password','',401);
+        } 
+    }
+    
+
+
 }
